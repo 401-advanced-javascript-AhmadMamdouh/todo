@@ -1,35 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
+import useAjax from '../../hooks/ajax-hook';
 
-import './todo.scss';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Card from 'react-bootstrap/Card';
+import CardGroup from 'react-bootstrap/CardGroup';
 
-const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 
+const todoAPI = 'https://todo-app-server-lab32.herokuapp.com/api/v1/todo';
 
 const ToDo = () => {
 
-  const [list, setList] = useState([]);
+  const ajaxHook = useAjax();
 
   const _addItem = (item) => {
     item.due = new Date();
-    fetch(todoAPI, {
-      method: 'post',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(item)
-    })
-      .then(response => response.json())
-      .then(savedItem => {
-        setList([...list, savedItem])
-      })
-      .catch(console.error);
+    ajaxHook.apiCall(todoAPI, 'post', item);
   };
 
   const _toggleComplete = id => {
 
-    let item = list.filter(i => i._id === id)[0] || {};
+    let item = ajaxHook.list.filter(i => i._id === id)[0] || {};
 
     if (item._id) {
 
@@ -37,56 +30,70 @@ const ToDo = () => {
 
       let url = `${todoAPI}/${id}`;
 
-      fetch(url, {
-        method: 'put',
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(item)
-      })
-        .then(response => response.json())
-        .then(savedItem => {
-          setList(list.map(listItem => listItem._id === item._id ? savedItem : listItem));
-        })
-        .catch(console.error);
-    }
+      ajaxHook.apiCall(url, 'put', item);
+    };
   };
 
   const _getTodoItems = () => {
-    fetch(todoAPI, {
-      method: 'get',
-      mode: 'cors',
-    })
-      .then(data => data.json())
-      .then(data => setList(data.results))
-      .catch(console.error);
+    ajaxHook.apiCall(todoAPI, 'get');
+  };
+
+  const _deleteTodoItems = id => {
+
+    let item = ajaxHook.list.filter(i => i._id === id)[0] || {};
+   
+    if (item._id) {
+      let url = `${todoAPI}/${id}`;
+      ajaxHook.apiCall(url, 'delete');
+    }
   };
 
   useEffect(_getTodoItems, []);
+  if(ajaxHook.list){
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <header>
+          <Navbar bg="primary" variant="dark" >
+            <Nav className="mr-auto">
+              <Nav.Link href="/" >Home</Nav.Link>
+            </Nav>
+          </Navbar>
+        </header>
+  
+        <section className="todo" style={{ display: 'inline-block', marginTop: '2vh', textAlign: 'left' }} >
+          <CardGroup >
+  
+            <div style={{ width: '80vw' }} >
+              <Card.Title style={{ width: '80vw', marginBottom: '0vh' }}>
+                <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ color: 'white' }}>
+                  There are {ajaxHook.list.filter(item => !item.complete).length} Items To Complete
+                </Navbar>
+              </Card.Title>
+              <Card style={{ width: '80vw', flexDirection: 'row', marginTop: '0vh', borderRadius: '0rem' }} >
+  
+                <Card.Body>
+                  <TodoForm handleSubmit={_addItem} />
+                </Card.Body>
+                <Card.Body>
+  
+                  <TodoList
+                    list={ajaxHook.list}
+                    handleComplete={_toggleComplete}
+                    handleDelete ={_deleteTodoItems}
+                  />
+  
+                </Card.Body>
+              </Card>
+  
+            </div>
+          </CardGroup>
+  
+        </section>
+  
+      </div>
+    );
+  } else return null;
 
-  return (
-    <>
-      <header>
-        <h2>
-          There are {list.filter(item => !item.complete).length} Items To Complete
-        </h2>
-      </header>
-
-      <section className="todo">
-
-        <div>
-          <TodoForm handleSubmit={_addItem} />
-        </div>
-
-        <div>
-          <TodoList
-            list={list}
-            handleComplete={_toggleComplete}
-          />
-        </div>
-      </section>
-    </>
-  );
 };
 
 export default ToDo;
