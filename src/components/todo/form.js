@@ -23,25 +23,26 @@ function TodoForm(props) {
       <Form onSubmit={handleSubmit}>
         <h3>Add Item</h3>
         <Form.Group >
-          <Form.Lable>
+          <Form.Label>
             To Do Item
-            <Form.Control type="text" name="text" placeholder="Item Details" onChange={handleInputChange} />          </Form.Lable>
+            </Form.Label>
+            <Form.Control type="text" name="text" placeholder="Item Details" onChange={handleInputChange} />         
         </Form.Group>
 
         <Form.Group >
-          <Form.Lable>
+          <Form.Label>
             Assigned To
+          </Form.Label>
             <Form.Control type="text" placeholder="Assignee name" name="assignee" onChange={handleInputChange} />
-          </Form.Lable>
         </Form.Group>
 
         <Form.Group >
-          <Form.Control type="range" custom defaultValue="1" min="1" max="5" name="difficulty" onChange={handleInputChange} />
+          <Form.Control type="range"  defaultValue="1" min="1" max="5" name="difficulty" onChange={handleInputChange} />
         </Form.Group>
 
 
-        <Form.Group controlId="formBasicRangeCustom">
-          <Button type="range" custom defaultValue="1" min="1" max="5" name="difficulty" onChange={handleInputChange} />
+        <Form.Group >
+          <Button type="submit">Add Item</Button>
         </Form.Group>
 
 
