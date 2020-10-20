@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
 
-import {Nav ,Navbar ,Card,CardGroup } from 'react-bootstrap';
+import { Nav, Navbar, Card, CardGroup } from 'react-bootstrap';
 
 
-import './todo.scss';
+// import './todo.scss';
 
 function ToDo(props) {
 
   const [todoList, setTodoList] = useState([]);
 
   const addItem = (item) => {
-    console.log("222")
     item._id = Math.random();
     item.complete = false;
     setTodoList({ list: [...todoList.list, item] });
@@ -43,7 +42,6 @@ function ToDo(props) {
 
 
   if (todoList.list) {
-    console.log("todoList.list", todoList.list)
     return (
       <div style={{ textAlign: 'center' }}>
         <header>
@@ -68,7 +66,7 @@ function ToDo(props) {
                 <Card.Body>
                   <TodoForm handleSubmit={addItem} />
                 </Card.Body>
-              
+
                 <Card.Body>
 
                   <TodoList

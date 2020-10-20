@@ -1,55 +1,52 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import useForm from '../../hooks/form-hook';
+
 
 function TodoForm(props) {
-  const [todoItem, setTodoItem] = useState({ item: {} });
 
-  const handleInputChange = e => {
-    setTodoItem({ item: { ...todoItem.item, [e.target.name]: e.target.value } });
-  };
+  const textInput = useForm();
+  const assigneeInput = useForm();
+  const difficultyRange = useForm();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    e.target.reset();
-    props.handleSubmit(todoItem.item);
-    const item = {};
-    setTodoItem({ item });
+    e.target.reset(); // I don't know why its not working
+    props.handleSubmit({text:textInput.value, assignee: assigneeInput.value, difficulty: difficultyRange.value});
   };
 
-
   return (
+
     <>
       <Form onSubmit={handleSubmit}>
         <h3>Add Item</h3>
+
         <Form.Group >
           <Form.Label>
             To Do Item
-            </Form.Label>
-            <Form.Control type="text" name="text" placeholder="Item Details" onChange={handleInputChange} />         
+            <Form.Control type="text" name="text" placeholder="Item Details" {...textInput} />
+          </Form.Label>
         </Form.Group>
 
         <Form.Group >
           <Form.Label>
-            Assigned To
+            Assigned to
+            <Form.Control type="text" name="assignee" placeholder="Assignee name" {...assigneeInput} />
           </Form.Label>
-            <Form.Control type="text" placeholder="Assignee name" name="assignee" onChange={handleInputChange} />
         </Form.Group>
 
-        <Form.Group >
-          <Form.Control type="range"  defaultValue="1" min="1" max="5" name="difficulty" onChange={handleInputChange} />
+        <Form.Group controlId="formBasicRangeCustom">
+          <Form.Control type="range" custom  min="1" max="5" name="difficulty" {...difficultyRange} />
         </Form.Group>
-
 
         <Form.Group >
           <Button type="submit">Add Item</Button>
         </Form.Group>
 
-
       </Form>
     </>
   );
-
 }
 
 export default TodoForm;
