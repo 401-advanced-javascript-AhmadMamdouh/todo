@@ -12,7 +12,7 @@ function TodoForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    e.target.reset(); // I don't know why its not working
+    e.target.reset(); 
     props.handleSubmit({text:textInput.value, assignee: assigneeInput.value, difficulty: difficultyRange.value});
   };
 
