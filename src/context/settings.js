@@ -20,7 +20,7 @@ function SettingsProvider (props) {
     changeNortField: setSortField,
   };
   function toggleCompVisibility() {
-    let inversed = completedVisibility ? false : true;
+    let inversed = completedVisibility?false:true;
     setCompletedVisibility(inversed);
   }
   function changeItemPerpage(items) {
