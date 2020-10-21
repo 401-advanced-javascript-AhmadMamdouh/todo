@@ -6,6 +6,7 @@ class Auth extends React.Component {
   constructor(props) {
     super(props);
   }
+  
   static contextType = LoginContext;
   render() {
     let okToRender = false;

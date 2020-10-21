@@ -90,11 +90,11 @@ const ToDo = () => {
               <Nav.Link href="/" >Home</Nav.Link>
             </Nav>
 
-            {/* <LoginProvider>
+            <LoginProvider>
               <Login />
               <EditLink />
               <DeleteLink />
-            </LoginProvider> */}
+            </LoginProvider>
 
           </Navbar>
         </header>
